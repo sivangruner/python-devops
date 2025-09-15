@@ -1,0 +1,50 @@
+# TextAnalyzer
+
+A Python library for text processing and analysis with sentiment analysis, summarization, and web content extraction capabilities.
+
+## Features
+
+- **Sentiment Analysis**: Analyze the emotional tone of text using NLTK's VADER sentiment analyzer
+- **Text Summarization**: Generate concise summaries from longer texts
+- **Text Cleaning**: Remove extra whitespace and normalize text
+- **URL Extraction**: Find and extract URLs from text content
+- **Web Content Fetching**: Retrieve and parse web page content
+- **Word Frequency Analysis**: Get frequency counts of words in text
+- **Configurable Settings**: Environment-based configuration management
+
+## Quick Start
+
+```python
+from TextAnalyzer import TextAnalyzer
+from TextAnalyzer.utils.text_ops import clean_text, extract_urls
+from TextAnalyzer.config.settings import Config
+
+# Initialize analyzer
+analyzer = TextAnalyzer()
+
+# Clean text
+cleaned = clean_text("  Hello    World!  ")
+print(cleaned)  # "Hello World!"
+
+# Extract URLs
+urls = extract_urls("Visit https://example.com for details")
+print(urls)  # ['https://example.com']
+
+# Sentiment analysis
+sentiment = analyzer.analyze_sentiment("This library is amazing!")
+print(sentiment['sentiment'])  # 'positive'
+
+# Text summarization
+summary = analyzer.summarize_text(long_text, num_sentences=2)
+print(summary)
+
+# Word frequency
+freq = analyzer.get_word_frequency("Python is great. Python is powerful.")
+print(freq)  # {'python': 2, 'great': 1, 'power': 1}
+```
+
+## Dependencies
+
+- requests: HTTP requests and web content fetching
+- beautifulsoup4: HTML parsing and content extraction
+- nltk: Natural language processing (tokenization, sentiment analysis)
