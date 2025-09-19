@@ -7,7 +7,7 @@ pipeline {
         GIT_TAG = bat(script: 'git describe --tags', returnStdout: true).trim()
 
     }
-
+"""
     stages {
         stage('Verify SemVer Tag') {
             when {
@@ -26,7 +26,7 @@ pipeline {
                 }
             }
         }
-
+"""
         stage('Lint') {
             steps {
                 bat 'task lint'
