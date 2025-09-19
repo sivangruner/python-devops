@@ -1,10 +1,5 @@
 pipeline {
     agent any
-//hi
-// Triggers the pipeline to run automatically whenever a Git tag is pushed.
-    triggers {
-        scm.git.TagTrigger(true)
-    }
 
     environment {
         PACKAGE_NAME = "textanalyzer"
