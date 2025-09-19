@@ -11,8 +11,8 @@ setup(
         "nltk",
     ],
     python_requires=">=3.7",
-    author="Your Name",
-    author_email="your.email@example.com",
+    author="Sivan",
+    author_email="Sivan.gruner@gmail.com",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
