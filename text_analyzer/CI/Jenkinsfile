@@ -4,8 +4,8 @@ pipeline {
     stages {
         stage('Lint') {
             steps {
-                dir('..') {
-                    bat 'task lint'
+                dir('C:\\Users\\Admin\\test_home\\python-devops\\text_analyzer') {
+                    bat '"C:\\Users\\Admin\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Task.Task_Microsoft.Winget.Source_8wekyb3d8bbwe\\task.exe" lint'
                 }
             }
         }
@@ -13,7 +13,7 @@ pipeline {
         stage('Build Package') {
             steps {
                 dir('..') {
-                    bat 'task build ver=1.2.3'
+                    bat '"C:\\Users\\Admin\\AppData\\Local\\Microsoft\\WinGet\\Packages\\Task.Task_Microsoft.Winget.Source_8wekyb3d8bbwe\\task.exe" build ver=1.2.3'
                 }
             }
         }
