@@ -4,19 +4,25 @@ pipeline {
     stages {
         stage('Lint') {
             steps {
-                bat 'task lint'
+                dir('..') {
+                    bat 'task lint'
+                }
             }
         }
 
         stage('Build Package') {
             steps {
-                bat "task build ver=1.2.3"
+                dir('..') {
+                    bat 'task build ver=1.2.3'
+                }
             }
         }
 
         stage('Test') {
             steps {
-                bat 'task test'
+                dir('..') {
+                    bat 'task test'
+                }
             }
         }
     }
