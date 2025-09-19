@@ -1,0 +1,30 @@
+version: '3'
+
+tasks:
+  lint:
+    desc: Run pre-commit hooks (Ruff and formatting)
+    dir: .
+    cmds:
+      - pre-commit run --all-files
+
+  clean:
+    desc: Remove build artifacts
+    dir: .
+    cmds:
+      - powershell -Command "Remove-Item -Recurse -Force build, dist, *.egg-info"
+
+  build:
+    desc: Build the package with specified version (e.g. task build -- ver=1.2.3)
+    dir: .
+    requires:
+      vars: [ver]
+    cmds:
+      - powershell -Command "(Get-Content pyproject.toml) -replace 'version = \".*\"', 'version = \"{{.ver}}\"' | Set-Content pyproject.toml"
+      - uv build --wheel
+
+  test:
+    desc: Install the package and run test_script\main.py
+    dir: .
+    cmds:
+      - ..\\test_script\\venv\\Scripts\\pip.exe install .\\dist\\textanalyzer-*.whl
+      - ..\\test_script\\venv\\Scripts\\python.exe ..\\test_script\\main.py
