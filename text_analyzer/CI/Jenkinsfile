@@ -1,6 +1,7 @@
 pipeline {
-    agent any   
+    agent any
 
+    stages {
         stage('Lint') {
             steps {
                 bat 'task lint'
@@ -10,7 +11,7 @@ pipeline {
         stage('Build Package') {
             steps {
                 bat "task clean"
-                bat "task build ver=${VERSION}"
+                bat "task build ver=1.2.3"
             }
         }
 
@@ -19,5 +20,5 @@ pipeline {
                 bat 'task test'
             }
         }
+    }
 }
-
