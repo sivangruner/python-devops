@@ -1,34 +1,8 @@
 pipeline {
-    agent any
-
-    environment {
-        PACKAGE_NAME = "textanalyzer"
-     """  
-        VENV_DIR = "venv"
-        GIT_TAG = bat(script: 'git describe --tags', returnStdout: true).trim()
-    """
+    agent any   
 
     }
-"""
-    stages {
-        stage('Verify SemVer Tag') {
-            when {
-                expression {
-                    return env.GIT_TAG ==~ /^v\d+\.\d+\.\d+$/
-                }
-            }
-        }
 
-        stage('Checkout and Extract Version') {
-            steps {
-                checkout scm
-                script {
-                    // Strip the 'v' prefix to get 1.2.3
-                    VERSION = env.GIT_TAG.replace('v', '')
-                }
-            }
-        }
-"""
         stage('Lint') {
             steps {
                 bat 'task lint'
