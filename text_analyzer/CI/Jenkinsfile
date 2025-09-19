@@ -1,8 +1,6 @@
 pipeline {
     agent any   
 
-    }
-
         stage('Lint') {
             steps {
                 bat 'task lint'
@@ -21,7 +19,5 @@ pipeline {
                 bat 'task test'
             }
         }
-
-    }
-
 }
+
