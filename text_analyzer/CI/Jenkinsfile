@@ -1,20 +1,5 @@
 def isTagBuild(){
-    def tag = ''
-    if (env.GIT_TAG && env.GIT_TAG != "") {
-        tag = env.GIT_TAG
-    
-    } else {
-        tag = bat(
-        script: 'git describe --exact-match --tags 2>NUL || exit 0',
-        returnStdout: true
-        ).trim()
-    }
-
-    if (tag == '') {
-        return false
-    }
-    return true
-
+    return false
 }
 
 
