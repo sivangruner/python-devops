@@ -4,8 +4,6 @@ def isTagBuild(){
 pipeline {
     agent any
 
-
-
     stages {
         stage('Lint') {
             when{
