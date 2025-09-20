@@ -5,6 +5,7 @@ pipeline {
         stage('Lint') {
             steps {
                 dir('..') {
+                    bat 'echo %WORKSPACE%'
                     bat 'task lint'
                 }
             }
@@ -17,6 +18,7 @@ pipeline {
                 }
             }
         }
+
 
         stage('Test') {
             steps {
