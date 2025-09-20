@@ -1,5 +1,9 @@
 def isTagBuild(){
-    return ( env.GIT_TAG && env.GIT_TAG !="") || bat(script: 'git describe --exact-match --tags || exit 0', returnStdout: true).trim()
+    if (env.GIT_TAG && env.GIT_TAG != "") {
+        return true
+    }
+    def tag = bat(script: 'git describe --exact-match --tags || exit 0', returnStdout: true).trim()
+    return tag != "" && !tag.startsWith("fatal:")
 }
 
 
