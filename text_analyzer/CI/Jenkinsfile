@@ -1,4 +1,28 @@
-def isTagBuild(){
+def isTagBuild() {
+    def tag = ''
+    
+    // Check if GIT_TAG is set (e.g., from a tag push event)
+    if (env.GIT_TAG && env.GIT_TAG != "") {
+        tag = env.GIT_TAG
+    } else {
+        // If no GIT_TAG, check the tag associated with the current commit
+        tag = bat(script: 'git describe --exact-match --tags 2>NUL', returnStdout: true).trim()
+    }
+
+    // If no tag found, return false
+    if (tag == '') {
+        return false
+    }
+
+    // Regular expression to check if the tag matches the format vX.Y.Z
+    def tagPattern = ~/^v\d+\.\d+\.\d+$/
+    
+    // Check if the tag matches the desired format
+    if (tag ==~ tagPattern) {
+        return true
+    }
+
+    // If the tag doesn't match the format, return false
     return false
 }
 
