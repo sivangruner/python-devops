@@ -1,9 +1,20 @@
 def isTagBuild(){
+    def tag = ''
     if (env.GIT_TAG && env.GIT_TAG != "") {
-        return true
+        tag = env.GIT_TAG
+    
+    } else {
+        tag = bat(
+        script: 'git describe --exact-match --tags 2>NUL || exit 0',
+        returnStdout: true
+        ).trim()
     }
-    def tag = bat(script: 'git describe --exact-match --tags || exit 0', returnStdout: true).trim()
-    return tag != "" && !tag.startsWith("fatal:")
+
+    if (tag == '') {
+        return false
+    }
+    return true
+
 }
 
 
@@ -11,6 +22,7 @@ pipeline {
     agent any
 
     stages {
+
         stage('Lint') {
             when{
                 expression{isTagBuild()}
