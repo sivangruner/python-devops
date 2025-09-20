@@ -6,7 +6,7 @@ def isTagBuild() {
         tag = env.GIT_TAG
     } else {
         // If no GIT_TAG, check the tag associated with the current commit
-        tag = bat(script: 'git describe --exact-match --tags 2>NUL', returnStdout: true).trim()
+        tag = bat(script: 'git describe --exact-match --tags 2>NUL || echo ""', returnStdout: true).trim()
     }
 
     // If no tag found, return false
