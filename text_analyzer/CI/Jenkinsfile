@@ -23,6 +23,8 @@ pipeline {
         stage('Test') {
             steps {
                 dir('.\\text_analyzer') {
+                    bat 'set PYTHONUTF8=1'
+                    bat 'chcp 65001'
                     bat 'task test'
                 }
             }

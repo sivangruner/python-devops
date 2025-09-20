@@ -114,7 +114,7 @@ def main():
         test_word_frequency()
         test_text_summarization()
 
-        print("✅ All tests completed successfully!")
+        print("`✅` All tests completed successfully!")
 
     except Exception as e:
         print(f"❌ Error during testing: {e}")
