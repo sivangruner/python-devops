@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Lint') {
             steps {
-                dir('..') {
+                dir('%WORKSPACE%\\text_analyzer') {
                     bat 'echo %WORKSPACE%'
                     bat 'task lint'
                 }
