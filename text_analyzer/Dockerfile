@@ -12,4 +12,5 @@ COPY ../test_script /app/test_script
 RUN pip install --no-cache-dir textanalyzer-*.whl
 
 # Run the test script (same as task test)
+# test comment
 CMD ["python", "/app/test_script/main.py"]
