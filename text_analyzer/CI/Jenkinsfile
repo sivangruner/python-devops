@@ -1,5 +1,5 @@
 def isTagBuild(){
-    return ( env.GIT_TAG && env.GIT_TAG !="") or bat(script: 'git describe --exact-match --tags || exit 0', returnStdout: true).trim()
+    return ( env.GIT_TAG && env.GIT_TAG !="") || bat(script: 'git describe --exact-match --tags || exit 0', returnStdout: true).trim()
 }
 
 pipeline {
