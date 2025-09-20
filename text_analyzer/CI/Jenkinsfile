@@ -1,6 +1,7 @@
 def isTagBuild(){
     return env.GIT_TAG && env.GIT_TAG !=""
 }
+
 pipeline {
     agent any
 
