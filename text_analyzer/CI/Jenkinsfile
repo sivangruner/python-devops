@@ -1,8 +1,16 @@
+def isTagBuild(){
+    return env.GIT_TAG && env.GIT_TAG !=""
+}
 pipeline {
     agent any
 
+
+    }
     stages {
         stage('Lint') {
+            when{
+                expression{isTagBuild()}
+            }
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task lint'
@@ -11,6 +19,9 @@ pipeline {
         }
 
         stage('Build Package') {
+            when{
+                expression{isTagBuild()}
+            }
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task build ver=1.2.3'
@@ -20,6 +31,9 @@ pipeline {
 
 
         stage('Test') {
+            when{
+                expression{isTagBuild()}
+            }
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task test'
