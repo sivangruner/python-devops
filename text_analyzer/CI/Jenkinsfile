@@ -5,7 +5,6 @@ pipeline {
         stage('Lint') {
             steps {
                 dir('.\\text_analyzer') {
-                    bat 'echo %WORKSPACE%'
                     bat 'task lint'
                 }
             }
@@ -23,7 +22,6 @@ pipeline {
         stage('Test') {
             steps {
                 dir('.\\text_analyzer') {
-                    bat 'set PYTHONIOENCODING=utf-8'
                     bat 'task test'
                 }
             }
