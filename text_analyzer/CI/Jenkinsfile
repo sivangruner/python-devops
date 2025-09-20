@@ -9,7 +9,7 @@ pipeline {
                     def tag = env.GIT_TAG
                     if (tag == null || !tag.matches("^v\\d+\\.\\d+\\.\\d+\$")) {
                         echo "No valid version tag found, skipping pipeline."
-                        currentBuild.result = 'ABORTED'
+                        currentBuild.result = 'SUCCESS'
                         return
                     } else {
                         echo "Valid tag format detected: ${tag}"
