@@ -1,6 +1,3 @@
-def isTagBuild(){
-    return true
-}
 
 pipeline {
     agent any
@@ -13,7 +10,7 @@ pipeline {
                     if (tag == null || !tag.matches("^v\\d+\\.\\d+\\.\\d+\$")) {
                         echo "No valid version tag found, skipping pipeline."
                         currentBuild.result = 'ABORTED'
-                        error("This build only runs on tags in the format v1.2.3")
+                        return
                     } else {
                         echo "Valid tag format detected: ${tag}"
                     }
@@ -21,9 +18,6 @@ pipeline {
             }
         }
         stage('Lint') {
-            when{
-                expression{isTagBuild()}
-            }
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task lint'
@@ -32,9 +26,6 @@ pipeline {
         }
 
         stage('Build Package') {
-            when{
-                expression{isTagBuild()}
-            }
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task build ver=1.2.3'
@@ -44,9 +35,6 @@ pipeline {
 
 
         stage('Test') {
-            when{
-                expression{isTagBuild()}
-            }
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task test'
