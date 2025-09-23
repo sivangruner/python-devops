@@ -1,8 +1,5 @@
 pipeline {
     agent any
-    environment {
-        GIT_TAG_VALUE = '' // Jenkins env variable
-    }
     stages {
 
         stage('Lint') {
