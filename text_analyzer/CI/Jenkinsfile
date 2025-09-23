@@ -61,7 +61,7 @@ pipeline {
 
 
 def isTagBuild() {
-    def tagPattern = ~/^v\d+\.\d+\.\d+$/
+    def tagPattern = ~/^v\\d+\\.\\d+\\.\\d+$/
 
     echo "GIT_TAG env: ${env.GIT_TAG}"
 
