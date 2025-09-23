@@ -52,6 +52,6 @@ def isTagBuild() {
 
     echo "Detected tag: ${tag}"
     result = tag ==~ tagPattern
-    echo "${result}
+    echo "${result}"
     return result
 }
