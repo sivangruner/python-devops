@@ -62,3 +62,4 @@ def isTagBuild() {
 
     return env.GIT_TAG_VALUE ==~ tagPattern
 }
+
