@@ -46,11 +46,12 @@ def isTagBuild() {
     def tagPattern = java.util.regex.Pattern.compile('^v\\d+\\.\\d+\\.\\d+$')
 
     echo "GIT_TAG env: ${env.GIT_TAG}"
-
-    def tagOutput = bat(
-        script: '@echo off & git describe --tags --exact-match 2>nul || echo ""',         
-        returnStdout: true
-    ).trim()
+    try{
+        def tagOutput = bat( script: 'git describe --tags --exact-match || echo ""', returnStdout: true ).trim()
+    } catch (err) {
+        echo "No tag detected, skipping stages."
+        return false
+    }
 
     def tag = tagOutput.readLines().last().trim()
 
