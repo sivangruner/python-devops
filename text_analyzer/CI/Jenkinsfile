@@ -58,8 +58,8 @@ def isTagBuild() {
         return false
     }
 
-    GIT_TAG_VALUE  = tagOutput.readLines().last().trim()
+    GIT_TAG_VALUE = tagOutput.readLines().last().trim()
     echo "Detected tag: ${tag}"
 
-    return tag ==~ tagPattern
+    return GIT_TAG_VALUE ==~ tagPattern
 }
