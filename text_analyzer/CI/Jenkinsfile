@@ -1,23 +1,24 @@
+def isTagBuild() {
+    // Regular expression to check if the tag matches the format vX.Y.Z
+    def tagPattern = ~/^v\d+\.\d+\.\d+$/    
+    // Check if GIT_TAG is set (e.g., from a tag push event)
+    if (env.GIT_TAG && env.GIT_TAG != "" && env.GIT_TAG ==~ tagPattern ) {
+        return true
+    }
+    // If the tag doesn't match the format, return false
+    return false
+}
+
 
 pipeline {
     agent any
+
     stages {
-       stage('Check Tag Format') {
-            steps {
-                script {
-                    // Check if the build is triggered by a tag
-                    def tag = env.GIT_TAG
-                    if (tag == null || !tag.matches("^v\\d+\\.\\d+\\.\\d+\$")) {
-                        echo "No valid version tag found, skipping pipeline."
-                        currentBuild.result = 'SUCCESS'
-                        return
-                    } else {
-                        echo "Valid tag format detected: ${tag}"
-                    }
-                }
-            }
-        }
+
         stage('Lint') {
+            when{
+                expression{isTagBuild()}
+            }
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task lint'
@@ -26,6 +27,9 @@ pipeline {
         }
 
         stage('Build Package') {
+            when{
+                expression{isTagBuild()}
+            }
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task build ver=1.2.3'
@@ -35,6 +39,9 @@ pipeline {
 
 
         stage('Test') {
+            when{
+                expression{isTagBuild()}
+            }
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task test'
