@@ -1,31 +1,14 @@
 pipeline {
     agent any
     environment {
-        GIT_TAG_VALUE = ''
+        GIT_TAG_VALUE = '' // Jenkins env variable
     }
     stages {
-        stage('Detect Tag') {
-            steps {
-                script {
-                    // Get the tag if the current commit has one
-                    def tagOutput = bat(
-                        script: 'git describe --tags --exact-match 2>nul || echo',
-                        returnStdout: true
-                    ).trim()
-
-                    if (tagOutput) {
-                        env.GIT_TAG_VALUE = tagOutput
-                        echo "Detected tag: ${env.GIT_TAG_VALUE}"
-                    } else {
-                        echo "No tag detected skipping pipeline"
-                        currentBuild.result = 'NOT_BUILT'
-                        error("This build is not for a tag.")
-                    }
-                }
-            }
-        }
 
         stage('Lint') {
+            when{
+                expression{isTagBuild()}
+            }
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task lint'
@@ -34,6 +17,9 @@ pipeline {
         }
 
         stage('Build Package') {
+            when{
+                expression{isTagBuild()}
+            }
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task clean'
@@ -42,7 +28,11 @@ pipeline {
             }
         }
 
+
         stage('Test') {
+            when{
+                expression{isTagBuild()}
+            }
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task test'
@@ -50,4 +40,25 @@ pipeline {
             }
         }
     }
+}
+
+
+def isTagBuild() {
+    def tagPattern = java.util.regex.Pattern.compile('^v\\d+\\.\\d+\\.\\d+$')
+
+    def tagOutput = '' // declare outside try so it's accessible after
+    try {
+        tagOutput = bat(
+            script: 'git describe --tags --exact-match || echo ""',
+            returnStdout: true
+        ).trim()
+    } catch (err) {
+        echo "No tag detected, skipping stages."
+        return false
+    }
+
+    env.GIT_TAG_VALUE  = tagOutput.readLines().last().trim()
+    echo "Detected tag: ${env.GIT_TAG_VALUE}"
+
+    return env.GIT_TAG_VALUE ==~ tagPattern
 }
