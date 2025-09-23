@@ -46,11 +46,12 @@ def isTagBuild() {
     echo "GIT_TAG env: ${env.GIT_TAG}"
 
     def tag = bat(
-        script: 'git describe --tags --exact-match || echo ""'
+        script: 'git describe --tags --exact-match || echo ""',         
+        returnStdout: true
     ).trim()
 
     echo "Detected tag: ${tag}"
     result = tag ==~ tagPattern
-    echo "${result}"
+    echo "${result}
     return result
 }
