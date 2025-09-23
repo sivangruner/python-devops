@@ -6,7 +6,7 @@ def isTagBuild() {
     if (env.GIT_TAG && env.GIT_TAG != "" && env.GIT_TAG ==~ tagPattern ) {
         return true
     }
-    {
+    
     echo "${sh(
         script: "git describe --tags --exact-match || true",
         returnStdout: true
