@@ -14,7 +14,7 @@ tasks:
       - powershell -Command "Remove-Item -Recurse -Force build, dist, *.egg-info"
 
   build:
-    desc: Build the package with specified version (e.g. task build -- ver=1.2.3)
+    desc: Build the package with specified version (e.g. task build ver=1.2.3)
     dir: .
     requires:
       vars: [ver]

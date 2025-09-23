@@ -23,7 +23,7 @@ pipeline {
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task clean'
-                    bat "task build ver=${env.GIT_TAG_VALUE.replaceFirst('^v','')}"
+                    bat "task build ver=\"${env.GIT_TAG_VALUE.replaceFirst('^v','')}\""
                 }
             }
         }
