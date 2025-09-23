@@ -1,8 +1,8 @@
-def GIT_TAG_VALUE = ""
-
 pipeline {
     agent any
-    
+    environment {
+        GIT_TAG_VALUE = '' // Jenkins env variable
+    }
     stages {
 
         stage('Lint') {
@@ -23,7 +23,7 @@ pipeline {
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task clean'
-                    bat "task build ver=${GIT_TAG_VALUE}"
+                    bat "task build ver=${env.GIT_TAG_VALUE.replaceFirst('^v','')}"
                 }
             }
         }
@@ -57,8 +57,8 @@ def isTagBuild() {
         return false
     }
 
-    GIT_TAG_VALUE  = tagOutput.readLines().last().trim()
-    echo "Detected tag: ${GIT_TAG_VALUE}"
+    env.GIT_TAG_VALUE  = tagOutput.readLines().last().trim()
+    echo "Detected tag: ${env.GIT_TAG_VALUE}"
 
-    return GIT_TAG_VALUE ==~ tagPattern
+    return env.GIT_TAG_VALUE ==~ tagPattern
 }
