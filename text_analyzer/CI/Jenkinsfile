@@ -2,9 +2,21 @@ def isTagBuild() {
     // Regular expression to check if the tag matches the format vX.Y.Z
     def tagPattern = ~/^v\d+\.\d+\.\d+$/    
     // Check if GIT_TAG is set (e.g., from a tag push event)
+    echo "${env.GIT_TAG}"
     if (env.GIT_TAG && env.GIT_TAG != "" && env.GIT_TAG ==~ tagPattern ) {
         return true
     }
+    {
+    echo "${sh(
+        script: "git describe --tags --exact-match || true",
+        returnStdout: true
+    ).trim()}"
+
+    echo "${sh(
+        script: "git describe --tags --exact-match || true",
+        returnStdout: false
+    ).trim()}"
+
     // If the tag doesn't match the format, return false
     return false
 }
