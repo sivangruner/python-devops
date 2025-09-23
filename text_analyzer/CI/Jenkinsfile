@@ -1,67 +1,60 @@
 pipeline {
     agent any
+
     environment {
-        GIT_TAG_VALUE = '' // Jenkins env variable
+        GIT_TAG_VALUE = ''
     }
+
     stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    // Detect if build is triggered by a tag
+                    def tagName = sh(script: "git describe --tags --exact-match || echo ''", returnStdout: true).trim()
+
+                    if (tagName) {
+                        env.GIT_TAG_VALUE = tagName
+                        echo "Checking out tag ${tagName}"
+                        checkout([
+                            $class: 'GitSCM',
+                            branches: [[name: tagName]],
+                            doGenerateSubmoduleConfigurations: false,
+                            extensions: [],
+                            userRemoteConfigs: [[url: 'https://github.com/sivangruner/python-devops.git']]
+                        ])
+                    } else {
+                        // normal branch checkout
+                        checkout scm
+                    }
+                }
+            }
+        }
 
         stage('Lint') {
-            when{
-                expression{isTagBuild()}
-            }
             steps {
-                dir('.\\text_analyzer') {
-                    bat 'task lint'
-                }
+                echo "Running lint..."
+                // your lint steps
             }
         }
 
-        stage('Build Package') {
-            when{
-                expression{isTagBuild()}
-            }
+        stage('Build') {
+            when { expression { env.GIT_TAG_VALUE } } // runs only if tag build
             steps {
-                dir('.\\text_analyzer') {
-                    bat 'task clean'
-                    bat "task build ver=\"${env.GIT_TAG_VALUE.replaceFirst('^v','')}\""
-                }
+                echo "Building release for tag ${env.GIT_TAG_VALUE}"
             }
         }
-
 
         stage('Test') {
-            when{
-                expression{isTagBuild()}
-            }
             steps {
-                dir('.\\text_analyzer') {
-                    bat 'task test'
-                }
+                echo "Running tests..."
+            }
+        }
+
+        stage('Deploy') {
+            when { expression { env.GIT_TAG_VALUE } } // only on tags
+            steps {
+                echo "Deploying ${env.GIT_TAG_VALUE}"
             }
         }
     }
 }
-
-
-def isTagBuild() {
-    def tagPattern = java.util.regex.Pattern.compile('^v\\d+\\.\\d+\\.\\d+$')
-
-    def tagOutput = '' // declare outside try so it's accessible after
-    try {
-        tagOutput = bat(
-            script: 'git describe --tags --exact-match || echo ""',
-            returnStdout: true
-        ).trim()
-    } catch (err) {
-        echo "No tag detected, skipping stages."
-        return false
-    }
-
-    env.GIT_TAG_VALUE  = tagOutput.readLines().last().trim()
-    echo "Detected tag: ${env.GIT_TAG_VALUE}"
-
-    return env.GIT_TAG_VALUE ==~ tagPattern
-}
-
-
-
