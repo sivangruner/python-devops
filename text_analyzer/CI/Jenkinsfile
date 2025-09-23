@@ -57,6 +57,7 @@ def isTagBuild() {
         return false
     }
 
+
     def tag = tagOutput.readLines().last().trim()
     echo "Detected tag: ${tag}"
 
