@@ -1,3 +1,6 @@
+// Global variable
+def GIT_TAG_VALUE = ''
+
 pipeline {
     agent any
 
@@ -21,7 +24,7 @@ pipeline {
             steps {
                 dir('.\\text_analyzer') {
                     bat 'task clean'
-                    bat 'task build ver=1.2.3'
+                    bat "task build ver=${GIT_TAG_VALUE}"
                 }
             }
         }
@@ -44,8 +47,6 @@ pipeline {
 def isTagBuild() {
     def tagPattern = java.util.regex.Pattern.compile('^v\\d+\\.\\d+\\.\\d+$')
 
-    echo "GIT_TAG env: ${env.GIT_TAG}"
-
     def tagOutput = '' // declare outside try so it's accessible after
     try {
         tagOutput = bat(
@@ -57,8 +58,7 @@ def isTagBuild() {
         return false
     }
 
-
-    def tag = tagOutput.readLines().last().trim()
+    GIT_TAG_VALUE  = tagOutput.readLines().last().trim()
     echo "Detected tag: ${tag}"
 
     return tag ==~ tagPattern
