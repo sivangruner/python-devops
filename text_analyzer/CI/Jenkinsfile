@@ -1,30 +1,25 @@
 pipeline {
     agent any
-
     environment {
         GIT_TAG_VALUE = ''
     }
-
     stages {
-        stage('Checkout') {
+        stage('Detect Tag') {
             steps {
                 script {
-                    // Detect if build is triggered by a tag
-                    def tagName = sh(script: "git describe --tags --exact-match || echo ''", returnStdout: true).trim()
+                    // Get the tag if the current commit has one
+                    def tagOutput = bat(
+                        script: 'git describe --tags --exact-match 2>nul || echo',
+                        returnStdout: true
+                    ).trim()
 
-                    if (tagName) {
-                        env.GIT_TAG_VALUE = tagName
-                        echo "Checking out tag ${tagName}"
-                        checkout([
-                            $class: 'GitSCM',
-                            branches: [[name: tagName]],
-                            doGenerateSubmoduleConfigurations: false,
-                            extensions: [],
-                            userRemoteConfigs: [[url: 'https://github.com/sivangruner/python-devops.git']]
-                        ])
+                    if (tagOutput) {
+                        env.GIT_TAG_VALUE = tagOutput
+                        echo "Detected tag: ${env.GIT_TAG_VALUE}"
                     } else {
-                        // normal branch checkout
-                        checkout scm
+                        echo "No tag detected skipping pipeline"
+                        currentBuild.result = 'NOT_BUILT'
+                        error("This build is not for a tag.")
                     }
                 }
             }
@@ -32,28 +27,26 @@ pipeline {
 
         stage('Lint') {
             steps {
-                echo "Running lint..."
-                // your lint steps
+                dir('.\\text_analyzer') {
+                    bat 'task lint'
+                }
             }
         }
 
-        stage('Build') {
-            when { expression { env.GIT_TAG_VALUE } } // runs only if tag build
+        stage('Build Package') {
             steps {
-                echo "Building release for tag ${env.GIT_TAG_VALUE}"
+                dir('.\\text_analyzer') {
+                    bat 'task clean'
+                    bat "task build ver=\"${env.GIT_TAG_VALUE.replaceFirst('^v','')}\""
+                }
             }
         }
 
         stage('Test') {
             steps {
-                echo "Running tests..."
-            }
-        }
-
-        stage('Deploy') {
-            when { expression { env.GIT_TAG_VALUE } } // only on tags
-            steps {
-                echo "Deploying ${env.GIT_TAG_VALUE}"
+                dir('.\\text_analyzer') {
+                    bat 'task test'
+                }
             }
         }
     }
