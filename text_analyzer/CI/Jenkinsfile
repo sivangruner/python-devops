@@ -47,9 +47,10 @@ def isTagBuild() {
     echo "GIT_TAG env: ${env.GIT_TAG}"
 
     def tagOutput = bat(
-        script: 'git describe --tags --exact-match || echo ""',         
+        script: '@echo off & git describe --tags --exact-match 2>nul || echo ""',         
         returnStdout: true
     ).trim()
+
     def tag = tagOutput.readLines().last().trim()
 
 
