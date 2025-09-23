@@ -1,4 +1,4 @@
-def isTagBuild() {
+"""def isTagBuild() {
     // Regular expression to check if the tag matches the format vX.Y.Z
     def tagPattern = ~/^v\d+\.\d+\.\d+$/    
     // Check if GIT_TAG is set (e.g., from a tag push event)
@@ -15,7 +15,7 @@ def isTagBuild() {
 
     // If the tag doesn't match the format, return false
     return false
-}
+}"""
 
 
 pipeline {
@@ -57,4 +57,20 @@ pipeline {
             }
         }
     }
+}
+
+
+def isTagBuild() {
+    def tagPattern = ~/^v\d+\.\d+\.\d+$/
+
+    echo "GIT_TAG env: ${env.GIT_TAG}"
+
+    def tag = bat(
+        script: 'git describe --tags --exact-match || echo ""',
+        returnStdout: true
+    ).trim()
+
+    echo "Detected tag: ${tag}"
+
+    return (tag ==~ tagPattern)
 }
