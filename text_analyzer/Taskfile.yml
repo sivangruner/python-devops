@@ -11,7 +11,7 @@ tasks:
     desc: Remove build artifacts
     dir: .
     cmds:
-      - powershell -Command "Remove-Item -Recurse -Force build, dist, *.egg-info -ErrorAction SilentlyContinue"
+      - powershell -Command "Remove-Item -Recurse -Force build, dist, *.egg-info -ErrorAction SilentlyContinue; exit 0"
 
   build:
     desc: Build the package with specified version (e.g. task build ver=1.2.3)
