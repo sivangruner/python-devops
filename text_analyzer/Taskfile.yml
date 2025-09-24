@@ -35,7 +35,7 @@ tasks:
     requires:
       vars: [ver]
     cmds:
-      - docker build -f Dockerfile -t textanalyzer:{{.ver}} .
+      - docker build --progress=plain -f Dockerfile -t textanalyzer:{{.ver}} .
 
   docker:run:
     desc: Run Docker container and execute test_script
