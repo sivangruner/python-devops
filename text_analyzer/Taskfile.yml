@@ -31,15 +31,15 @@ tasks:
 
   docker:build:
     desc: Build Docker image for TextAnalyzer
-    dir: .
+    dir: ..
     requires:
       vars: [ver]
     cmds:
-      - docker build --progress=plain -f Dockerfile -t textanalyzer:{{.ver}} .
+      - docker build --progress=plain -f text_analyzer/Dockerfile -t textanalyzer:{{.ver}} .
 
   docker:run:
     desc: Run Docker container and execute test_script
-    dir: .
+    dir: ..
     requires:
       vars: [ver]
     cmds:
