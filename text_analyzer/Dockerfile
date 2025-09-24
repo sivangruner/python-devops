@@ -5,8 +5,8 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Copy wheel and test_script
-COPY text_analyzer/dist/*.whl /app/
-COPY test_script /app/test_script
+COPY dist/*.whl /app/
+COPY ../test_script /app/test_script
 
 # Install the wheel
 RUN pip install --no-cache-dir textanalyzer-*.whl
