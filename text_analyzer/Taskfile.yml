@@ -28,3 +28,19 @@ tasks:
     cmds:
       - ..\\test_script\\venv\\Scripts\\pip.exe install .\\dist\\textanalyzer-*.whl
       - ..\\test_script\\venv\\Scripts\\python.exe ..\\test_script\\main.py
+
+  docker:build:
+    desc: Build Docker image for TextAnalyzer
+    dir: .
+    requires:
+      vars: [ver]
+    cmds:
+      - docker build -f text_analyzer/Dockerfile -t textanalyzer:{{.ver}} .
+
+  docker:run:
+    desc: Run Docker container and execute test_script
+    dir: .
+    requires:
+      vars: [ver]
+    cmds:
+      - docker run --rm textanalyzer:{{.ver}}
