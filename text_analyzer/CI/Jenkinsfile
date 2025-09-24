@@ -43,8 +43,8 @@ pipeline {
             }
             steps {
                 dir('.\\text_analyzer') {
-                    bat 'task docker:build ver=\"${env.GIT_TAG_VALUE.replaceFirst('^v','')}\"'
-                    bat 'task docker:run ver=\"${env.GIT_TAG_VALUE.replaceFirst('^v','')}\"'
+                    bat "task docker:build ver=\"${env.GIT_TAG_VALUE.replaceFirst('^v','')}\""
+                    bat "task docker:run ver=\"${env.GIT_TAG_VALUE.replaceFirst('^v','')}\""
                 }
             }
         }
