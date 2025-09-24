@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "textanalyzer"
-version = "0.0.9"
+version = "9.9.6"
 description = "A Python library for text processing and analysis"
 authors = [
   { name="Sivan", email="Sivan.gruner@gmail.com" }
